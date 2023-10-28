@@ -1,0 +1,23 @@
+#define MOD ( (int)1e9 + 7 )
+enum Vowel{
+	Vowel_A = 0,
+	Vowel_E = 1,
+	Vowel_I = 2,
+	Vowel_O = 3,
+	Vowel_U = 4,
+	Vowel_AMOUNT
+};
+int countVowelPermutation(const int len){
+	int dp[Vowel_AMOUNT];	//[len - 1]
+	for (int i = 0; i < Vowel_AMOUNT; i++)
+		dp[i] = 1;
+	for (int i = len - 2; i >= 0; i--)
+    {
+		const int dp_new[Vowel_AMOUNT] = { [Vowel_A] = dp[Vowel_E], [Vowel_E] = ((dp[Vowel_A] + dp[Vowel_I]) % MOD), [Vowel_I] = ((((dp[Vowel_A] + dp[Vowel_E]) % MOD + dp[Vowel_O]) % MOD + dp[Vowel_U]) % MOD), [Vowel_O] = ((dp[Vowel_I] + dp[Vowel_U]) % MOD), [Vowel_U] = dp[Vowel_A] };
+		memcpy(&dp, &dp_new, sizeof (dp_new));
+	}
+	int sum = 0;
+	for (int i = 0; i < Vowel_AMOUNT; i++)
+		sum = (sum + dp[i]) % MOD;
+	return sum;
+}
